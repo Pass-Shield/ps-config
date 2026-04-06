@@ -1,13 +1,11 @@
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/audit_db
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: '{cipher}2700e275c6e90bddd0975ff3c675dd7c7788578c03b04629468a51a3f32f563d' #encrypt
+    password: '{cipher}bc6e931dfade4656fa96b830e6d116889c8b8d9978fbe70ba1d01dd5617209c2' #encrypt
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    
     hibernate:
       ddl-auto: update
       
@@ -15,3 +13,22 @@ spring:
       hibernate:
         format_sql: true
         show_sql: false
+
+server:
+  port: 3000
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces
+
+  otlp:
+    metrics:
+      export:
+        enabled: false
