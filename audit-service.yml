@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/audit_db
-    username: '{cipher}2700e275c6e90bddd0975ff3c675dd7c7788578c03b04629468a51a3f32f563d' #encrypt
-    password: '{cipher}bc6e931dfade4656fa96b830e6d116889c8b8d9978fbe70ba1d01dd5617209c2' #encrypt
+    username: '{cipher}172fc0d9ddab31d355de8125135163fff01d1ac7da9d88aa860a0140306f4b90' #encrypt
+    password: '{cipher}ef0fc7cc0e35bf2ff973d12714b74060dac106faadd8c5846a06e35ca83a89f4' #encrypt
     driver-class-name: org.postgresql.Driver
 
   jpa:

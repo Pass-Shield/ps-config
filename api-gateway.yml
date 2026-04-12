@@ -1,0 +1,85 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          default-filters:
+            - name: CircuitBreaker
+              args:
+                name: mainCircuitBreaker
+                fallbackUri: forward:/fallback/generic
+          routes:
+            # IAM Service
+            - id: ps-iam
+              uri: lb://ps-iam
+              predicates:
+                - Path=/api/v1/iam/**
+              filters:
+                - RewritePath=/api/v1/iam/(?<segment>.*), /$\{segment}
+
+            # Vault Service
+            - id: ps-vault
+              uri: lb://ps-vault
+              predicates:
+                - Path=/api/v1/vault/**
+              filters:
+                - RewritePath=/api/v1/vault/(?<segment>.*), /$\{segment}
+
+            # Audit Service
+            - id: ps-audit
+              uri: lb://audit-service
+              predicates:
+                - Path=/api/v1/audit/**
+              filters:
+                - RewritePath=/api/v1/audit/(?<segment>.*), /$\{segment}
+
+            # Generator Service
+            - id: ps-generator
+              uri: lb://ps-generator
+              predicates:
+                - Path=/api/v1/generator/**
+              filters:
+                - RewritePath=/api/v1/generator/(?<segment>.*), /$\{segment}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IAM_ISSUER_URI:http://localhost:8080/realms/passshield}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+          - gateway
+  endpoint:
+    gateway:
+      enabled: true
+  opentelemetry:
+    tracing:
+      enabled: true
+      export:
+        otlp:
+          endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces    
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+# logging:
+#   level:
+#     org.springframework.cloud.gateway: DEBUG
+#     com.pass.shield.gateway: DEBUG
+    # org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: DEBUG
+    # org.springframework.cloud.gateway.handler.predicate: TRACE
