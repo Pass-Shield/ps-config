@@ -36,6 +36,9 @@ spring:
                 - Path=/api/v1/audit/**
               filters:
                 - RewritePath=/api/v1/audit/(?<segment>.*), /$\{segment}
+              metadata:
+                connect-timeout: 3000
+                response-timeout: 60000
 
             # Generator Service
             - id: ps-generator
