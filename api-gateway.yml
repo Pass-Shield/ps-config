@@ -31,7 +31,7 @@ spring:
 
             # Audit Service
             - id: ps-audit
-              uri: lb://audit-service
+              uri: lb://ps-audit
               predicates:
                 - Path=/api/v1/audit/**
               filters:

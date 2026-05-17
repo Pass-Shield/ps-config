@@ -1,0 +1,76 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/audit_db
+    username: '{cipher}172fc0d9ddab31d355de8125135163fff01d1ac7da9d88aa860a0140306f4b90' #encrypt
+    password: '{cipher}ef0fc7cc0e35bf2ff973d12714b74060dac106faadd8c5846a06e35ca83a89f4' #encrypt
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+
+  ai:
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://ollama:11434}
+      chat:
+        options:
+          keep-alive: 5m
+          model: "smollm2:1.7b"
+          num-ctx: 2048
+          num_gpu: 999
+          num_thread: 0
+
+server:
+  port: 3000
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [traceId=%mdc{traceId:-} spanId=%mdc{spanId:-}] - %msg%n"
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      hibpCircuitBreaker:
+        failureRateThreshold: 10
+        slidingWindowSize: 20
+        waitDurationInOpenState: 30s
+        permittedNumberOfCallsInHalfOpenState: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+app:
+  nats:
+    url: ${NATS_URL:nats://nats:4222}
+    user: ${NATS_AUDIT_USER:audit}
+    password: ${NATS_AUDIT_PASS:audit}
+    subject: ${NATS_AUDIT_SUBJECT:audit.events.*}
+    queue-group: audit-service-group
+    stream-name: audit-service-stream
+    durable-name: audit-service-consumer
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces
+
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+  endpoints:
+    web:
+      exposure:
+        include: refresh
