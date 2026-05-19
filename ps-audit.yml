@@ -28,11 +28,19 @@ spring:
 server:
   port: 3000
 
+# logging:
+#   level:
+#     root: INFO
+#   pattern:
+#     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [traceId=%mdc{traceId:-} spanId=%mdc{spanId:-}] - %msg%n"
+
 logging:
-  level:
-    root: INFO
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [traceId=%mdc{traceId:-} spanId=%mdc{spanId:-}] - %msg%n"
+  structured:
+    format: 
+      console: logstash
+    json:
+      add:
+        service_name: ${spring.application.name}   
 
 resilience4j:
   circuitbreaker:
