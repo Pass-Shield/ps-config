@@ -40,13 +40,11 @@ spring:
                 connect-timeout: 3000
                 response-timeout: 60000
 
-            # Generator Service
-            - id: ps-generator
-              uri: lb://ps-generator
+            # Policy Service
+            - id: ps-policy
+              uri: lb://ps-policy
               predicates:
-                - Path=/api/v1/generator/**
-              filters:
-                - RewritePath=/api/v1/generator/(?<segment>.*), /$\{segment}
+                - Path=/api/v1/password-policy/current,/api/v1/password/policy
   security:
     oauth2:
       resourceserver:
