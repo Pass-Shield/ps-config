@@ -1,0 +1,23 @@
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces
+
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+
+server:
+  port: 3001
