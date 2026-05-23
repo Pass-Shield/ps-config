@@ -1,0 +1,20 @@
+database:
+  host: postgres
+  port: 5432
+  name: audit_db
+  username: '{cipher}172fc0d9ddab31d355de8125135163fff01d1ac7da9d88aa860a0140306f4b90' #encrypt
+  password: '{cipher}ef0fc7cc0e35bf2ff973d12714b74060dac106faadd8c5846a06e35ca83a89f4' #encrypt
+
+nats:
+  url: ${NATS_URL:nats://nats:4222}
+  user: ${NATS_AUDIT_USER:audit}
+  password: ${NATS_AUDIT_PASS:audit}
+  subject: ${NATS_AUDIT_SUBJECT:audit.events.*}
+  stream-name: audit-service-stream
+  durable-name: audit-service-consumer
+
+telemetry:
+  otel-endpoint: http://${JAEGER_HOST:jaeger}:4318
+
+eureka:
+  url: http://discovery-server:8761/eureka/
