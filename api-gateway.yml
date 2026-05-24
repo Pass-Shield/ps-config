@@ -15,11 +15,9 @@ spring:
           routes:
             # IAM Service
             - id: ps-iam
-              uri: lb://ps-iam
+              uri: http://ps-iam:8081
               predicates:
-                - Path=/api/v1/iam/**
-              filters:
-                - RewritePath=/api/v1/iam/(?<segment>.*), /$\{segment}
+                - Path=/api/v1/auth/**,/api/v1/users/**
 
             # Vault Service
             - id: ps-vault
