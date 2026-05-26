@@ -15,7 +15,7 @@ spring:
           routes:
             # IAM Service
             - id: ps-iam
-              uri: http://ps-iam:8081
+              uri: lb://ps-iam
               predicates:
                 - Path=/api/v1/auth/**,/api/v1/users/**
 
