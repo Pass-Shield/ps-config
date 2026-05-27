@@ -35,7 +35,7 @@ spring:
               filters:
                 - RewritePath=/api/v1/audit/(?<segment>.*), /$\{segment}
               metadata:
-                connect-timeout: 3000
+                connect-timeout: 10000
                 response-timeout: 60000
 
             # Policy Service

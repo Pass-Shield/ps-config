@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/audit_db
-    username: '{cipher}172fc0d9ddab31d355de8125135163fff01d1ac7da9d88aa860a0140306f4b90' #encrypt
-    password: '{cipher}ef0fc7cc0e35bf2ff973d12714b74060dac106faadd8c5846a06e35ca83a89f4' #encrypt
+    username: '{cipher}ce92227569c6693b0ccb6a54167589ba1136a73dc9f86509228c7621ade5a302' #encrypt
+    password: '{cipher}30d54d98312ea6113f63381c545e4e9f8daac380962dd1a03d008a5b8a06a5b2' #encrypt
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -14,16 +14,16 @@ spring:
         format_sql: true
         show_sql: false
 
-  ai:
-    ollama:
-      base-url: ${OLLAMA_BASE_URL:http://ollama:11434}
-      chat:
-        options:
-          keep-alive: 5m
-          model: "smollm2:1.7b"
-          num-ctx: 2048
-          num_gpu: 999
-          num_thread: 0
+  # ai:
+    # ollama:
+    #   base-url: ${OLLAMA_BASE_URL:http://ollama:11434}
+    #   chat:
+    #     options:
+    #       keep-alive: 5m
+    #       model: "smollm2:1.7b"
+    #       num-ctx: 2048
+    #       num_gpu: 999
+    #       num_thread: 0
 
 server:
   port: 3000
