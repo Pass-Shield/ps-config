@@ -1,3 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/vault_db
+    username: '{cipher}e987d1885282c7ed3647b71625204a76231261701ff4acd6a832375bea55157d' #encrypt
+    password: '{cipher}d9dd119982039b8a8514e3744b41129e80ab62e6d47bff0f13efe87a46cdd632' #encrypt
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
 management:
   tracing:
     sampling:
