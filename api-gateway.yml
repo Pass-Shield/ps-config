@@ -40,7 +40,7 @@ spring:
 
             # Policy Service
             - id: ps-policy
-              uri: lb://ps-policy
+              uri: http://ps-policy:8080
               predicates:
                 - Path=/api/v1/password-policy/current,/api/v1/password/policy
   security:
