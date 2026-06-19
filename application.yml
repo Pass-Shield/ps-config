@@ -1,5 +1,6 @@
 eureka:
   client:
+    enabled: false
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
