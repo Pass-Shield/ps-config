@@ -13,25 +13,29 @@ spring:
       hibernate:
         format_sql: true
         show_sql: false
-    # ai:
-    # ollama:
-    #   base-url: ${OLLAMA_BASE_URL:http://ollama:11434}
-    #   chat:
-    #     options:
-    #       keep-alive: 5m
-    #       model: "smollm2:1.7b"
-    #       num-ctx: 2048
-    #       num_gpu: 999
-    #       num_thread: 0
 
-server:
-  port: 3000
-
-# logging:
-#   level:
-#     root: INFO
-#   pattern:
-#     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [traceId=%mdc{traceId:-} spanId=%mdc{spanId:-}] - %msg%n"
+  ai:
+    openai:
+      base-url: https://openrouter.ai/api
+      api-key: ${LLM_API_KEY}
+      chat:
+        options:
+          model: "nvidia/nemotron-3-nano-30b-a3b:free"
+          # model: "openrouter/free"
+          response-format:
+            type: json_object
+          extra-body:
+            reasoning:
+              effort: "none"
+    ollama:
+      base-url: ${OLLAMA_BASE_URL}
+      chat:
+        options:
+          keep-alive: 5m
+          model: "smollm2:1.7b"
+          num-ctx: 2048
+          num_gpu: 999
+          num_thread: 0
 
 logging:
   structured:
@@ -52,6 +56,27 @@ resilience4j:
         automaticTransitionFromOpenToHalfOpenEnabled: true
 
 app:
+  llm:
+    provider: ${LLM_PROVIDER:openai}
+    advisor:
+      template: >
+          You are a senior security advisor. Provide straightforward remediation steps. Do NOT use markdown. Do NOT provide descriptions.
+
+          CONTEXT:
+          - Category: %s
+          - Entropy Score: %d/100
+          - Is Breached (HIBP): %s
+          - Is Reused: %s
+          - Password Length: %d characters
+
+          CONSTRAINTS:
+          - Do NOT ask for the password.
+          - Be concise (max 3 sentences).
+          - Return ONLY raw, valid JSON. Do NOT wrap the response in markdown code blocks like ```json.
+
+          CRITICAL: You MUST strictly use the voice and persona of Rick from Rick and Morty. Reek of booze, use burps (*burp*), be extremely cynical, and lightly insult the user's intelligence regarding their passwords. Do NOT break character inside the JSON response.
+
+          provide ADVICE for user:
   nats:
     url: ${NATS_URL:nats://nats:4222}
     user: ${NATS_AUDIT_USER:audit}
@@ -67,14 +92,12 @@ management:
   tracing:
     sampling:
       probability: 1.0
-
-  opentelemetry:
-    tracing:
-      export:
-        otlp:
-          endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces
+    propagation:
+      type: W3C
 
   otlp:
+    tracing:
+      endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces
     metrics:
       export:
         enabled: false

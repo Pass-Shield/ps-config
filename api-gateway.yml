@@ -62,16 +62,14 @@ management:
   endpoint:
     gateway:
       enabled: true
-  opentelemetry:
-    tracing:
-      enabled: true
-      export:
-        otlp:
-          endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces    
   tracing:
     sampling:
       probability: 1.0
+    propagation:
+      type: W3C
   otlp:
+    tracing:
+      endpoint: http://${JAEGER_HOST:jaeger}:4318/v1/traces
     metrics:
       export:
         enabled: false
